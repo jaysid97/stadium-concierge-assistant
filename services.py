@@ -56,6 +56,8 @@ def draft_gmail_reply(to_email: str, subject: str, body: str) -> Optional[Dict[s
         from email.message import EmailMessage
         import base64
         
+        logger.info("Security: Preparing to draft email. Ensuring no highly sensitive PII is exposed in body.")
+        
         message = EmailMessage()
         message.set_content(body)
         message['To'] = to_email

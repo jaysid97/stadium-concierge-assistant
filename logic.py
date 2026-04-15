@@ -8,6 +8,13 @@ from typing import Optional, Dict, Any
 
 logger = logging.getLogger(__name__)
 
+def sanitize_input(text: str) -> str:
+    """Security Function: Sanitize input to prevent prompt injection and limit payload size."""
+    if not text:
+        return ""
+    clean_text = text.strip()[:1000]
+    return clean_text.replace("System:", "").replace("Instruction:", "")
+
 def process_user_intent(user_input: str) -> Optional[Dict[str, Any]]:
     """
     Uses the Context-Engine (powered by Gemini) to analyze user intent and extract actionable data.
@@ -19,6 +26,11 @@ def process_user_intent(user_input: str) -> Optional[Dict[str, Any]]:
             
         client = genai.Client(api_key=api_key)
         
+        clean_input = sanitize_input(user_input)
+        if not clean_input:
+            logger.warning("Security: Empty or invalid input provided.")
+            return None
+            
         system_prompt = f"""
         You are a Context-Engine for a Freelance Project Management Assistant.
         Your goal is to parse user inputs and determine what automations need to fire.
@@ -38,7 +50,7 @@ def process_user_intent(user_input: str) -> Optional[Dict[str, Any]]:
         
         response = client.models.generate_content(
             model='gemini-2.5-flash',
-            contents=f"{system_prompt}\n\nUser Input: {user_input}",
+            contents=f"{system_prompt}\n\nUser Input: {clean_input}",
             config=types.GenerateContentConfig(
                 response_mime_type="application/json"
             )

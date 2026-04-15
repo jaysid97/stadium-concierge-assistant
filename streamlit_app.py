@@ -9,8 +9,13 @@ load_dotenv()
 
 st.set_page_config(page_title="Freelance Assistant Demo", page_icon="🤖", layout="centered")
 
-st.title("🤖 Freelance Project Management Assistant")
-st.markdown("*(Simulated Live Demo for Hackathon Submission)*")
+@st.cache_data(ttl=3600)
+def cached_process_user_intent(user_input_str):
+    """Efficiency: Cache repeated prompts to save API overhead."""
+    return process_user_intent(user_input_str)
+
+st.markdown("<h1 aria-label='Freelance Project Management Assistant'>🤖 Freelance Project Management Assistant</h1>", unsafe_allow_html=True)
+st.markdown("<p aria-label='Simulated Live Demo for Hackathon Submission'><em>(Simulated Live Demo for Hackathon Submission)</em></p>", unsafe_allow_html=True)
 st.write("This interactive demo uses **Gemini 2.5 Flash** to extract context. Unlike the local CLI tool, it safely skips hitting actual Google APIs to keep your personal data secure.")
 
 st.divider()
@@ -22,7 +27,7 @@ if st.button("Submit to Context-Engine", type="primary"):
         st.warning("Please enter some text.")
     else:
         with st.spinner("Gemini is analyzing your intent..."):
-            intent_data = process_user_intent(user_input)
+            intent_data = cached_process_user_intent(user_input)
             
         if not intent_data:
             st.error("Failed to process the input. Make sure GEMINI_API_KEY is present in the environment (.env file).")
@@ -33,7 +38,7 @@ if st.button("Submit to Context-Engine", type="primary"):
             with st.expander("View Raw JSON Dump from Gemini"):
                 st.json(intent_data)
                 
-            st.subheader("Simulated Automation Workflow ⚡")
+            st.markdown("<h3 aria-label='Simulated Automation Workflow'>Simulated Automation Workflow ⚡</h3>", unsafe_allow_html=True)
             
             if intent == 'meeting_scheduling':
                 start_time = intent_data.get('start_time')
