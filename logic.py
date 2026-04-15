@@ -32,19 +32,19 @@ def process_user_intent(user_input: str) -> Optional[Dict[str, Any]]:
             return None
             
         system_prompt = f"""
-        You are a Context-Engine for a Freelance Project Management Assistant.
-        Your goal is to parse user inputs and determine what automations need to fire.
+        You are a Context-Engine for a Stadium Concierge Assistant at a large-scale sporting venue.
+        Your goal is to parse user inputs regarding crowd movement, waiting times, or real-time coordination and determine what automations need to fire.
         
         The current date and time is {datetime.now().isoformat()}.
         
         You must respond exclusively with a valid JSON object matching this exact structure:
         {{
-            "intent": "meeting_scheduling" | "task_creation" | "other",
-            "client_name": "Extracted name of the client if present, else null",
-            "client_email": "Extracted email if present, else null",
-            "start_time": "ISO 8601 format for proposed start (guess year based on current time), else null",
+            "intent": "event_coordination" | "stadium_support" | "attendance_reminder" | "other",
+            "target_location": "Extracted location or section in the stadium if present, else null",
+            "support_issue": "Extracted problem or coordination issue if present, else null",
+            "start_time": "ISO 8601 format for proposed time (guess year based on current time), else null",
             "end_time": "ISO 8601 format for proposed end (default 1 hour after start if not specified), else null",
-            "task_description": "A summarized task description for preparation/action item, else null"
+            "task_description": "A summarized task description for a reminder or action item, else null"
         }}
         """
         

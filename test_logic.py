@@ -14,12 +14,12 @@ class TestLogic(unittest.TestCase):
         mock_client_class.return_value = mock_client_instance
         
         expected_json = {
-            "intent": "meeting_scheduling",
-            "client_name": "Acme Corp",
-            "client_email": "hello@acme.com",
+            "intent": "event_coordination",
+            "target_location": "Gate A",
+            "support_issue": "Long wait lines",
             "start_time": "2023-11-20T10:00:00.000000",
             "end_time": "2023-11-20T11:00:00.000000",
-            "task_description": "Prepare slides for Acme Corp"
+            "task_description": "Coordinate VIP entry at Gate A"
         }
         
         mock_response = MagicMock()
@@ -27,12 +27,12 @@ class TestLogic(unittest.TestCase):
         mock_client_instance.models.generate_content.return_value = mock_response
 
         # Act
-        result = process_user_intent("Acme Corp wants to meet on Nov 20th at 10am.")
+        result = process_user_intent("Coordinate VIP entry at Gate A on Nov 20th at 10am.")
 
         # Assert
         self.assertIsNotNone(result)
-        self.assertEqual(result.get("intent"), "meeting_scheduling")
-        self.assertEqual(result.get("client_name"), "Acme Corp")
+        self.assertEqual(result.get("intent"), "event_coordination")
+        self.assertEqual(result.get("target_location"), "Gate A")
         
     @patch('logic.genai.Client')
     @patch.dict(os.environ, {"GEMINI_API_KEY": "test_key"})

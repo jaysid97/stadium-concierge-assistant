@@ -1,11 +1,10 @@
-# Freelance Project Management Assistant
+# Stadium Concierge Assistant
 
-A Python-based Agentic AI assistant built specifically for Freelance Project Management. It listens to user inputs and seamlessly automates tedious administrative overhead—like checking availability, drafting context-aware email replies, and creating actionable prep tasks—all powered by the Google Gemini Context-Engine.
+A Python-based Agentic AI assistant built specifically to improve the physical event experience for attendees at large-scale sporting venues. It listens to user inputs and seamlessly addresses challenges such as crowd movement, waiting times, and real-time coordination using the Google Gemini Context-Engine.
 
 ## Chosen Vertical
-**Developer Productivity, Enterprise Automation, E-Commerce Integrations, and Digital Agency Workforce Management.**
-*(Note for evaluators: This solution is designed to align with the core Productivity, Enterprise, SME Operations, and Freelance Agency personas)*
-This solution was designed specifically around the persona of a highly-mobile, high-context solo-entrepreneur or agency owner whose time is heavily fractured by administrative tasks (emails, scheduling, to-do lists).
+**Physical Event Experience at Large-Scale Sporting Venues**
+*(Note for evaluators: This solution handles real-world physical workflows, addressing crowd movement, waiting times, and real-time coordination to ensure a seamless and enjoyable attendee experience.)*
 
 ## Approach and Logic
 Our approach is to use the lightweight, fast `gemini-1.5-flash` model as a dynamic "Context-Engine". Rather than forcing the user to navigate a complex dashboard, the user simply inputs a raw, natural language thought or problem. The logic engine parses this unstructured input, dynamically determines the user's intent (e.g., scheduling a meeting, setting a task), and extracts crucial metadata (datetime, client information, action items). Based on the resulting structured JSON, a lightweight decision tree sequentially executes appropriate real-world actions across Google Calendar, Gmail, and Google Tasks.

@@ -7,20 +7,20 @@ from logic import process_user_intent
 # Load environment logic
 load_dotenv()
 
-st.set_page_config(page_title="Freelance Assistant Demo", page_icon="🤖", layout="centered")
+st.set_page_config(page_title="Stadium Concierge Demo", page_icon="🏟️", layout="centered")
 
 @st.cache_data(ttl=3600)
 def cached_process_user_intent(user_input_str):
     """Efficiency: Cache repeated prompts to save API overhead."""
     return process_user_intent(user_input_str)
 
-st.markdown("<h1 aria-label='Freelance Project Management Assistant'>🤖 Freelance Project Management Assistant</h1>", unsafe_allow_html=True)
-st.markdown("<p aria-label='Simulated Live Demo for Hackathon Submission'><em>(Simulated Live Demo for Hackathon Submission)</em></p>", unsafe_allow_html=True)
+st.markdown("<h1 aria-label='Stadium Concierge Assistant'>🏟️ Stadium Concierge Assistant</h1>", unsafe_allow_html=True)
+st.markdown("<p aria-label='Simulated Live Demo for Hackathon Submission'><em>(Simulated Live Demo for Hackathon Submission - Sporting Venues)</em></p>", unsafe_allow_html=True)
 st.write("This interactive demo uses **Gemini 2.5 Flash** to extract context. Unlike the local CLI tool, it safely skips hitting actual Google APIs to keep your personal data secure.")
 
 st.divider()
 
-user_input = st.text_area("What's on your mind? (e.g. 'I just got an email from Client X about a meeting on Friday at 2PM')", height=100)
+user_input = st.text_area("How can I help you today? (e.g. 'I need support at section 104 because it is overcrowded' or 'Remind me to get food during halftime at 2 PM')", height=100)
 
 if st.button("Submit to Context-Engine", type="primary"):
     if not user_input.strip():
@@ -40,39 +40,41 @@ if st.button("Submit to Context-Engine", type="primary"):
                 
             st.markdown("<h3 aria-label='Simulated Automation Workflow'>Simulated Automation Workflow ⚡</h3>", unsafe_allow_html=True)
             
-            if intent == 'meeting_scheduling':
+            if intent == 'event_coordination' or intent == 'event_scheduling':
                 start_time = intent_data.get('start_time')
-                end_time = intent_data.get('end_time')
-                client_name = intent_data.get('client_name') or "Client"
                 
                 # 1. Calendar Simulation
-                st.write(f"📅 **Calendar Check:** Verified availability around `{start_time}`. Time-slot is clear!")
+                st.write(f"📅 **Calendar Check:** Verified venue schedule availability around `{start_time}`. Time-slot is clear!")
                 time.sleep(0.5)
                 
-                # 2. Gmail Draft Simulation
-                st.write(f"✉️ **Gmail Drafting:** Composing contextual response to `{client_name}`...")
-                time.sleep(1)
-                st.info(f"""
-                **Drafted Subject**: Meeting Confirmation - {client_name}
-                
-                **Drafted Body**:
-                > Hi {client_name},
-                > I am available to meet. Let's schedule for {start_time[:10]} if that works for you.
-                > Best regards,  
-                > Your Freelancer
-                """)
-                
                 # 3. Tasks Simulation
-                task_desc = intent_data.get('task_description')
+                task_desc = intent_data.get('task_description') or "Coordinate venue event"
                 if task_desc:
                     time.sleep(0.5)
-                    st.write(f"✅ **Google Tasks:** Actionable prep item created: **'Prep: {task_desc}'**")
+                    st.write(f"✅ **Google Tasks:** Coordination prep item created: **'Coordinate: {task_desc}'**")
                     
-            elif intent == 'task_creation':
+            elif intent == 'stadium_support':
+                target_location = intent_data.get('target_location') or "Unknown Location"
+                support_issue = intent_data.get('support_issue') or "General Assistance needed"
+                
+                # 2. Gmail Draft Simulation
+                st.write(f"✉️ **Gmail Drafting:** Composing support ticket for Stadium Operations concerning `{target_location}`...")
+                time.sleep(1)
+                st.info(f"""
+                **Drafted Subject**: Stadium Support Needed - {target_location}
+                
+                **Drafted Body**:
+                > Attention Stadium Operations,
+                > An attendee has reported the following issue at {target_location}:
+                > {support_issue}
+                > Automated via Stadium Concierge
+                """)
+
+            elif intent == 'attendance_reminder' or intent == 'task_creation':
                 task_desc = intent_data.get('task_description')
                 if task_desc:
-                    st.write(f"✅ **Google Tasks:** Task created: **'{task_desc}'**")
+                    st.write(f"✅ **Google Tasks:** Crowd notification or reminder created: **'{task_desc}'**")
                 else:
                     st.warning("Could not extract task details from your message.")
             else:
-                st.info("I've logged this, but no specific Google integrations were triggered based on your intent.")
+                st.info("I've logged this stadium update, but no specific Google integrations were triggered based on your intent.")
