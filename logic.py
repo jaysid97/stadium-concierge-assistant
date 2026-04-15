@@ -1,27 +1,23 @@
 import os
 import json
 import logging
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from datetime import datetime
 from typing import Optional, Dict, Any
 
 logger = logging.getLogger(__name__)
-
-def initialize_gemini() -> None:
-    """Initializes the Gemini API with the environment variable key."""
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        raise ValueError("GEMINI_API_KEY environment variable not set. Please update your .env file.")
-    genai.configure(api_key=api_key)
 
 def process_user_intent(user_input: str) -> Optional[Dict[str, Any]]:
     """
     Uses the Context-Engine (powered by Gemini) to analyze user intent and extract actionable data.
     """
     try:
-        initialize_gemini()
-        # Use gemini-1.5-flash which is fast and lightweight for text processing tasks
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY environment variable not set. Please update your .env file.")
+            
+        client = genai.Client(api_key=api_key)
         
         system_prompt = f"""
         You are a Context-Engine for a Freelance Project Management Assistant.
@@ -40,9 +36,12 @@ def process_user_intent(user_input: str) -> Optional[Dict[str, Any]]:
         }}
         """
         
-        response = model.generate_content(
-            f"{system_prompt}\n\nUser Input: {user_input}",
-            generation_config={"response_mime_type": "application/json"}
+        response = client.models.generate_content(
+            model='gemini-1.5-flash',
+            contents=f"{system_prompt}\n\nUser Input: {user_input}",
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json"
+            )
         )
         
         parsed_data = json.loads(response.text)
