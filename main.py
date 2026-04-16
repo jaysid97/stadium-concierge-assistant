@@ -38,6 +38,10 @@ def main() -> None:
                 print("Assistant: Sorry, I couldn't understand that request or a service failed.")
                 continue
                 
+            if intent_data.get('error'):
+                print(f"Assistant: API Error -> {intent_data.get('error')}")
+                continue
+                
             intent = intent_data.get('intent')
             print(f"Assistant: Understood intent -> {intent.upper()}")
             

@@ -60,4 +60,4 @@ def process_user_intent(user_input: str) -> Optional[Dict[str, Any]]:
         return parsed_data
     except Exception as e:
         logger.error(f"Failed to process intent with Gemini: {e}")
-        return None
+        return {"error": f"Failed to process intent with Gemini: {e}"}

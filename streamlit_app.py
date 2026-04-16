@@ -31,6 +31,8 @@ if st.button("Submit to Context-Engine", type="primary"):
             
         if not intent_data:
             st.error("Failed to process the input. Make sure GEMINI_API_KEY is present in the environment (.env file).")
+        elif intent_data.get('error'):
+            st.error(intent_data.get('error'))
         else:
             intent = intent_data.get('intent', 'unknown')
             st.success(f"**Intent Recognized:** `{intent.upper()}`")
